@@ -124,14 +124,14 @@ for i in range(len(tweets)):
 
 tweets = processed_tweets_text
 
-data_frame_from_excel['Tweets'] = np.array([tweet for tweet in tweets])
+data_frame_from_excel['Tweet'] = np.array([tweet for tweet in tweets])
 data_frame_from_excel['SA'] = np.array([tweet_sa for tweet_sa in processed_tweets_sentiment])
 
-pos_tweets = [tweet for index, tweet in enumerate(data_frame_from_excel['Tweets']) if
+pos_tweets = [tweet for index, tweet in enumerate(data_frame_from_excel['Tweet']) if
               data_frame_from_excel['SA'][index] > 0]
-neu_tweets = [tweet for index, tweet in enumerate(data_frame_from_excel['Tweets']) if
+neu_tweets = [tweet for index, tweet in enumerate(data_frame_from_excel['Tweet']) if
               data_frame_from_excel['SA'][index] == 0]
-neg_tweets = [tweet for index, tweet in enumerate(data_frame_from_excel['Tweets']) if
+neg_tweets = [tweet for index, tweet in enumerate(data_frame_from_excel['Tweet']) if
               data_frame_from_excel['SA'][index] < 0]
 
 display(data_frame_from_excel)
@@ -139,3 +139,5 @@ display(data_frame_from_excel)
 print('Percentage of positive tweets: %.2f' % (len(pos_tweets) * 100 / len(tweets)))
 print('Percentage of neutral tweets: %.2f' % (len(neu_tweets) * 100 / len(tweets)))
 print('Percentage of negative tweets: %.2f' % (len(neg_tweets) * 100 / len(tweets)))
+
+data_frame_from_excel.to_csv('cleaned_dataset.csv')
