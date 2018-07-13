@@ -5,8 +5,9 @@ from modules.feature_extraction import get_most_common_words
 from modules.sentiment_analysis import get_sentiment_percentage_summary
 from modules.sql_like_query import *
 from modules.visualization import *
+import matplotlib.pyplot as plt
 
-file = "apple_dataset.xlsx"
+file = "apple_dataset1.xlsx"
 
 xl = pd.ExcelFile(file)
 
@@ -41,6 +42,17 @@ grouped = remove_rows_with_null_columns(
     group_by_column_list=['Country'],
 ).count()
 
-grouped = prepare_massive_numeric_data_to_view(grouped, 'Country')
+grouped = prepare_massive_numeric_data_to_view(grouped, 'Country', threshold=0.01)
 
-plot_bar_x(grouped, title='Group By Country', x_label='Countries', y_label='Count')
+plot_bar_x(grouped, 'Country', title='Group By Country', x_label='Countries', y_label='Count')
+
+#### Second Scenario ####
+grouped = remove_rows_with_null_columns(
+    data_frame_from_excel,
+    filter_column_list=['Date'],
+    group_by_column_list=['Date'],
+).count()
+
+grouped = prepare_massive_numeric_data_to_view(grouped, 'Date')
+
+plot_bar_x(grouped, 'Date', title='Group By Date', x_label='Date', y_label='Count')
