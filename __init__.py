@@ -83,8 +83,20 @@ def fifth_scenario():
         plot_pie_x(data_frame, keys, 'Values', title='Group Tweets Sentiments From %s' % country)
 
 
+def sixth_scenario():
+    products_repetition_count = get_most_common_words(
+        tweets=cleaned_tweets,
+        key_list=['ipod', 'ipad', 'iphone', 'mac', 'ios', 'iwatch'])
+    keys = list(products_repetition_count.keys())
+    values = list(products_repetition_count.values())
+    data_frame = pd.DataFrame(
+        {'Products': keys, 'Counts': values}, columns=['Products', 'Counts'])
+    plot_pie_x(data_frame, keys, 'Counts', title='Group Tweets By Product')
+
+
 first_scenario()
 second_scenario()
 third_scenario()
 fourth_scenario()
 fifth_scenario()
+sixth_scenario()

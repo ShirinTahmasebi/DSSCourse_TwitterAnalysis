@@ -3,7 +3,10 @@ import string
 from collections import Counter
 
 
-def get_most_common_words(top_words_number, tweets, key_list=[]):
+def get_most_common_words(tweets, top_words_number=0, key_list=None):
+    if key_list is None:
+        key_list = []
+
     punctuation = list(string.punctuation)
     stop = stopwords.words('english') + punctuation + ['rt', 'via']
 
@@ -16,7 +19,10 @@ def get_most_common_words(top_words_number, tweets, key_list=[]):
                 word_all.append(word)
         count_all.update(word_all)
 
-    dic = {'most_common': count_all.most_common(top_words_number)}
+    if top_words_number > 0:
+        dic = {'most_common': count_all.most_common(top_words_number)}
+    else:
+        dic = {}
     for key in key_list:
         dic.update({key: count_all[key]})
 
