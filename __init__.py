@@ -1,9 +1,9 @@
 import pandas as pd
 from IPython.display import display
-
 from modules.data_cleaning import get_cleaned_data
 from modules.feature_extraction import get_most_common_words
 from modules.sentiment_analysis import get_sentiment_percentage_summary
+from modules.sql_like_query import *
 
 file = "apple_dataset.xlsx"
 
@@ -18,7 +18,7 @@ display(data_frame_from_excel)
 tweets = get_cleaned_data(tweets)
 print(get_sentiment_percentage_summary(tweets))
 
-tweets.to_csv('cleaned_dataset.csv')
+data_frame_from_excel.to_csv('cleaned_dataset.csv')
 
 ret = get_most_common_words(25, tweets)
 print(ret)
@@ -27,3 +27,23 @@ ret = get_most_common_words(2, tweets,
                             ['apple', 'Apple', 'iPod', 'ipod', 'iPad', 'ipad', 'iPhone', 'iphone', 'mac', 'Mac', 'IOS',
                              'ios', 'iWatch', 'iwatch', 'Watch', 'watch'])
 print(ret)
+
+tweets = data_frame_from_excel.dropna(subset=['Country'])
+print(tweets['Country'])
+
+print(remove_rows_with_null_columns(data_frame_from_excel, ['Country']))
+
+grouped = remove_rows_with_null_columns(
+    data_frame_from_excel,
+    filter_column_list=['Country'],
+    result_column_list=['Country', 'Tweet'],
+    group_by_column_list=['Country'],
+).count()
+print(grouped)
+
+grouped = remove_rows_with_null_columns(
+    data_frame_from_excel,
+    filter_column_list=['Country'],
+    group_by_column_list=['Country'],
+).count()
+print(grouped)
