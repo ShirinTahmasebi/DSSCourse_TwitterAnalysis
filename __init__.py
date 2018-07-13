@@ -108,6 +108,20 @@ def seventh_scenario():
         plot_pie_x(data_frame, keys, 'Values', title='Group Tweets Sentiments For Product %s' % product)
 
 
+def eighth_scenario():
+    tweets_with_country_field = filter_group_remove_null_columns(data_frame_from_excel, ['Date'], ['Date'])
+    dates = tweets_with_country_field['Date'].values
+    for date in set(dates):
+        selected_data_frame = data_frame_from_excel.loc[data_frame_from_excel['Date'] == date]
+
+        sentiments_value = get_sentiment_percentage_summary(selected_data_frame['Tweet'])
+        keys = list(sentiments_value.keys())
+        values = list(sentiments_value.values())
+        data_frame = pd.DataFrame(
+            {'Sentiment': keys, 'Values': values}, columns=['Sentiment', 'Values'])
+        plot_pie_x(data_frame, keys, 'Values', title='Group Tweets Sentiments in date %s' % date)
+
+
 first_scenario()
 second_scenario()
 third_scenario()
@@ -115,3 +129,4 @@ fourth_scenario()
 fifth_scenario()
 sixth_scenario()
 seventh_scenario()
+eighth_scenario()
