@@ -7,61 +7,58 @@ from modules.sql_like_query import *
 from modules.visualization import *
 import matplotlib.pyplot as plt
 
-file = "apple_dataset1.xlsx"
+file = "apple_dataset.xlsx"
 
 xl = pd.ExcelFile(file)
 
 data_frame_from_excel = xl.parse(xl.sheet_names[0])
 
-tweets = data_frame_from_excel['Tweet']
+cleaned_tweets = get_cleaned_data(data_frame_from_excel['Tweet'])
 
-display(data_frame_from_excel)
-
-tweets = get_cleaned_data(tweets)
-print(get_sentiment_percentage_summary(tweets))
+data_frame_from_excel['Tweet'] = cleaned_tweets
 
 data_frame_from_excel.to_csv('cleaned_dataset.csv')
 
-ret = get_most_common_words(25, tweets)
-print(ret)
 
-ret = get_most_common_words(2, tweets,
-                            ['apple', 'Apple', 'iPod', 'ipod', 'iPad', 'ipad', 'iPhone', 'iphone', 'mac', 'Mac', 'IOS',
-                             'ios', 'iWatch', 'iwatch', 'Watch', 'watch'])
-print(ret)
-
-#### First Scenario ####
-grouped = remove_rows_with_null_columns(
-    data_frame_from_excel,
-    filter_column_list=['Country'],
-    group_by_column_list=['Country'],
-).count()
-grouped = prepare_massive_numeric_data_to_view(grouped, 'Country', threshold=0.01)
-plot_bar_x(grouped, 'Country', title='Group By Country', x_label='Countries', y_label='Count')
-
-#### Second Scenario ####
-grouped = remove_rows_with_null_columns(
-    data_frame_from_excel,
-    filter_column_list=['Date'],
-    group_by_column_list=['Date'],
-).count()
-
-grouped = prepare_massive_numeric_data_to_view(grouped, 'Date')
-
-plot_bar_x(grouped, 'Date', title='Group By Date', x_label='Date', y_label='Count')
-
-### Third Scenario ####
-tweets_with_country_field = remove_rows_with_null_columns(data_frame_from_excel, ['Country'], ['Country'])
-countries = tweets_with_country_field['Country'].values
-for country in set(countries):
-    selected_data_frame = data_frame_from_excel.loc[data_frame_from_excel['Country'] == country]
-
+def first_scenario():
     grouped = remove_rows_with_null_columns(
-        selected_data_frame,
+        data_frame_from_excel,
+        filter_column_list=['Country'],
+        group_by_column_list=['Country'],
+    ).count()
+    grouped = prepare_massive_numeric_data_to_view(grouped, 'Country', threshold=0.01)
+    plot_bar_x(grouped, 'Country', title='Group By Country', x_label='Countries', y_label='Count')
+
+
+def second_scenario():
+    grouped = remove_rows_with_null_columns(
+        data_frame_from_excel,
         filter_column_list=['Date'],
         group_by_column_list=['Date'],
     ).count()
 
     grouped = prepare_massive_numeric_data_to_view(grouped, 'Date')
 
-    plot_bar_x(grouped, 'Date', title='Group Tweets From %s By Date' % country, x_label='Date', y_label='Count')
+    plot_bar_x(grouped, 'Date', title='Group By Date', x_label='Date', y_label='Count')
+
+
+def third_scenario():
+    tweets_with_country_field = remove_rows_with_null_columns(data_frame_from_excel, ['Country'], ['Country'])
+    countries = tweets_with_country_field['Country'].values
+    for country in set(countries):
+        selected_data_frame = data_frame_from_excel.loc[data_frame_from_excel['Country'] == country]
+
+        grouped = remove_rows_with_null_columns(
+            selected_data_frame,
+            filter_column_list=['Date'],
+            group_by_column_list=['Date'],
+        ).count()
+
+        grouped = prepare_massive_numeric_data_to_view(grouped, 'Date')
+
+        plot_bar_x(grouped, 'Date', title='Group Tweets From %s By Date' % country, x_label='Date', y_label='Count')
+
+
+first_scenario()
+second_scenario()
+third_scenario()
