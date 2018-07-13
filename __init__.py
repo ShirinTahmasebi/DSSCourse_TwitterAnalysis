@@ -1,11 +1,9 @@
 import pandas as pd
-from IPython.display import display
 from modules.data_cleaning import get_cleaned_data
 from modules.feature_extraction import get_most_common_words
 from modules.sentiment_analysis import get_sentiment_percentage_summary
 from modules.sql_like_query import *
 from modules.visualization import *
-import matplotlib.pyplot as plt
 
 file = "apple_dataset.xlsx"
 
@@ -139,6 +137,21 @@ def ninth_scenario():
         plot_pie_x(data_frame, keys, 'Values', title='Group Tweets Sentiments in date %s' % date)
 
 
+def tenth_scenario():
+    products = ['ipod', 'ipad', 'iphone', 'mac', 'ios', 'iwatch']
+    dict = {}
+    for product in set(products):
+        selected_data_frame = data_frame_from_excel.loc[data_frame_from_excel['Tweet'].str.contains(product)]
+        if selected_data_frame.values.size == 0:
+            continue
+        dict.update({product: selected_data_frame.sum()['Retweets']})
+    keys = list(dict.keys())
+    values = list(dict.values())
+    data_frame = pd.DataFrame(
+        {'Sentiment': keys, 'Values': values}, columns=['Sentiment', 'Values'])
+    plot_pie_x(data_frame, keys, 'Values', title='Retweets per product')
+
+
 first_scenario()
 second_scenario()
 third_scenario()
@@ -148,3 +161,4 @@ sixth_scenario()
 seventh_scenario()
 eighth_scenario()
 ninth_scenario()
+tenth_scenario()
