@@ -5,7 +5,7 @@ from modules.sentiment_analysis import get_sentiment_percentage_summary
 from modules.sql_like_query import *
 from modules.visualization import *
 
-file = "apple_dataset.xlsx"
+file = "apple_dataset1.xlsx"
 
 xl = pd.ExcelFile(file)
 
@@ -139,26 +139,42 @@ def ninth_scenario():
 
 def tenth_scenario():
     products = ['ipod', 'ipad', 'iphone', 'mac', 'ios', 'iwatch']
-    dict = {}
+    result_dict = {}
     for product in set(products):
         selected_data_frame = data_frame_from_excel.loc[data_frame_from_excel['Tweet'].str.contains(product)]
         if selected_data_frame.values.size == 0:
             continue
-        dict.update({product: selected_data_frame.sum()['Retweets']})
-    keys = list(dict.keys())
-    values = list(dict.values())
+        result_dict.update({product: selected_data_frame.sum()['Retweets']})
+    keys = list(result_dict.keys())
+    values = list(result_dict.values())
     data_frame = pd.DataFrame(
-        {'Sentiment': keys, 'Values': values}, columns=['Sentiment', 'Values'])
+        {'Products': keys, 'Values': values}, columns=['Products', 'Values'])
     plot_pie_x(data_frame, keys, 'Values', title='Retweets per product')
 
 
-first_scenario()
-second_scenario()
-third_scenario()
-fourth_scenario()
-fifth_scenario()
-sixth_scenario()
-seventh_scenario()
-eighth_scenario()
-ninth_scenario()
-tenth_scenario()
+def eleventh_scenario():
+    products = ['ipod', 'ipad', 'iphone', 'mac', 'ios', 'iwatch']
+    result_dict = {}
+    for product in set(products):
+        selected_data_frame = data_frame_from_excel.loc[data_frame_from_excel['Tweet'].str.contains(product)]
+        if selected_data_frame.values.size == 0:
+            continue
+        result_dict.update({product: selected_data_frame.sum()['Favs']})
+    keys = list(result_dict.keys())
+    values = list(result_dict.values())
+    data_frame = pd.DataFrame(
+        {'Products': keys, 'Values': values}, columns=['Products', 'Values'])
+    plot_pie_x(data_frame, keys, 'Values', title='Favorites per product')
+
+
+# first_scenario()
+# second_scenario()
+# third_scenario()
+# fourth_scenario()
+# fifth_scenario()
+# sixth_scenario()
+# seventh_scenario()
+# eighth_scenario()
+# ninth_scenario()
+# tenth_scenario()
+eleventh_scenario()
