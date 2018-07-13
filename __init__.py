@@ -30,20 +30,13 @@ ret = get_most_common_words(2, tweets,
                              'ios', 'iWatch', 'iwatch', 'Watch', 'watch'])
 print(ret)
 
-tweets = data_frame_from_excel.dropna(subset=['Country'])
-print(tweets['Country'])
-
-print(remove_rows_with_null_columns(data_frame_from_excel, ['Country']))
-
 #### First Scenario ####
 grouped = remove_rows_with_null_columns(
     data_frame_from_excel,
     filter_column_list=['Country'],
     group_by_column_list=['Country'],
 ).count()
-
 grouped = prepare_massive_numeric_data_to_view(grouped, 'Country', threshold=0.01)
-
 plot_bar_x(grouped, 'Country', title='Group By Country', x_label='Countries', y_label='Count')
 
 #### Second Scenario ####
@@ -56,3 +49,19 @@ grouped = remove_rows_with_null_columns(
 grouped = prepare_massive_numeric_data_to_view(grouped, 'Date')
 
 plot_bar_x(grouped, 'Date', title='Group By Date', x_label='Date', y_label='Count')
+
+### Third Scenario ####
+tweets_with_country_field = remove_rows_with_null_columns(data_frame_from_excel, ['Country'], ['Country'])
+countries = tweets_with_country_field['Country'].values
+for country in set(countries):
+    selected_data_frame = data_frame_from_excel.loc[data_frame_from_excel['Country'] == country]
+
+    grouped = remove_rows_with_null_columns(
+        selected_data_frame,
+        filter_column_list=['Date'],
+        group_by_column_list=['Date'],
+    ).count()
+
+    grouped = prepare_massive_numeric_data_to_view(grouped, 'Date')
+
+    plot_bar_x(grouped, 'Date', title='Group Tweets From %s By Date' % country, x_label='Date', y_label='Count')
