@@ -4,6 +4,7 @@ from modules.data_cleaning import get_cleaned_data
 from modules.feature_extraction import get_most_common_words
 from modules.sentiment_analysis import get_sentiment_percentage_summary
 from modules.sql_like_query import *
+from modules.visualization import *
 
 file = "apple_dataset.xlsx"
 
@@ -33,17 +34,13 @@ print(tweets['Country'])
 
 print(remove_rows_with_null_columns(data_frame_from_excel, ['Country']))
 
+#### First Scenario ####
 grouped = remove_rows_with_null_columns(
     data_frame_from_excel,
     filter_column_list=['Country'],
-    result_column_list=['Country', 'Tweet'],
     group_by_column_list=['Country'],
 ).count()
-print(grouped)
 
-grouped = remove_rows_with_null_columns(
-    data_frame_from_excel,
-    filter_column_list=['Country'],
-    group_by_column_list=['Country'],
-).count()
-print(grouped)
+grouped = prepare_massive_numeric_data_to_view(grouped, 'Country')
+
+plot_bar_x(grouped, title='Group By Country', x_label='Countries', y_label='Count')
