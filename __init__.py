@@ -21,7 +21,7 @@ data_frame_from_excel.to_csv('cleaned_dataset.csv')
 
 
 def first_scenario():
-    grouped = remove_rows_with_null_columns(
+    grouped = filter_group_remove_null_columns(
         data_frame_from_excel,
         filter_column_list=['Country'],
         group_by_column_list=['Country'],
@@ -31,7 +31,7 @@ def first_scenario():
 
 
 def second_scenario():
-    grouped = remove_rows_with_null_columns(
+    grouped = filter_group_remove_null_columns(
         data_frame_from_excel,
         filter_column_list=['Date'],
         group_by_column_list=['Date'],
@@ -43,12 +43,12 @@ def second_scenario():
 
 
 def third_scenario():
-    tweets_with_country_field = remove_rows_with_null_columns(data_frame_from_excel, ['Country'], ['Country'])
+    tweets_with_country_field = filter_group_remove_null_columns(data_frame_from_excel, ['Country'], ['Country'])
     countries = tweets_with_country_field['Country'].values
     for country in set(countries):
         selected_data_frame = data_frame_from_excel.loc[data_frame_from_excel['Country'] == country]
 
-        grouped = remove_rows_with_null_columns(
+        grouped = filter_group_remove_null_columns(
             selected_data_frame,
             filter_column_list=['Date'],
             group_by_column_list=['Date'],
@@ -59,6 +59,32 @@ def third_scenario():
         plot_bar_x(grouped, 'Date', title='Group Tweets From %s By Date' % country, x_label='Date', y_label='Count')
 
 
+def fourth_scenario():
+    sentiments_value = get_sentiment_percentage_summary(cleaned_tweets)
+    # sample for sentiment_value = {'Positive': 44.44444444444444, 'Neutral': 44.44444444444444, 'Negative': 11.11111111111111}
+    keys = list(sentiments_value.keys())
+    values = list(sentiments_value.values())
+    data_frame = pd.DataFrame(
+        {'Sentiment': keys, 'Values': values}, columns=['Sentiment', 'Values'])
+    plot_pie_x(data_frame, keys, 'Values', title='Total Tweets Sentiments')
+
+
+def fifth_scenario():
+    tweets_with_country_field = filter_group_remove_null_columns(data_frame_from_excel, ['Country'], ['Country'])
+    countries = tweets_with_country_field['Country'].values
+    for country in set(countries):
+        selected_data_frame = data_frame_from_excel.loc[data_frame_from_excel['Country'] == country]
+
+        sentiments_value = get_sentiment_percentage_summary(selected_data_frame['Tweet'])
+        keys = list(sentiments_value.keys())
+        values = list(sentiments_value.values())
+        data_frame = pd.DataFrame(
+            {'Sentiment': keys, 'Values': values}, columns=['Sentiment', 'Values'])
+        plot_pie_x(data_frame, keys, 'Values', title='Group Tweets Sentiments From %s' % country)
+
+
 first_scenario()
 second_scenario()
 third_scenario()
+fourth_scenario()
+fifth_scenario()
