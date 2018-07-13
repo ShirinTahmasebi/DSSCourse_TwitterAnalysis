@@ -19,19 +19,22 @@ def get_sentiments_data(tweets):
 
 
 def get_sentiment_count_summary(tweets):
-    tweets_sentiment = get_sentiments_data(tweets)
-
-    pos_tweets = [tweet for index, tweet in enumerate(tweets) if
-                  tweets_sentiment[index] == 1]
-    neu_tweets = [tweet for index, tweet in enumerate(tweets) if
-                  tweets_sentiment[index] == 0]
-    neg_tweets = [tweet for index, tweet in enumerate(tweets) if
-                  tweets_sentiment[index] == -1]
+    pos_tweets = 0
+    neu_tweets = 0
+    neg_tweets = 0
+    for tweet in tweets:
+        tweets_sentiment = analyze_sentiment(tweet)
+        if tweets_sentiment == 1:
+            pos_tweets += 1
+        elif tweets_sentiment == 0:
+            neu_tweets += 1
+        else:
+            neg_tweets += 1
 
     return {
-        'Positive': len(pos_tweets),
-        'Neutral': len(neu_tweets),
-        'Negative': len(neg_tweets),
+        'Positive': pos_tweets,
+        'Neutral': neu_tweets,
+        'Negative': neg_tweets,
     }
 
 

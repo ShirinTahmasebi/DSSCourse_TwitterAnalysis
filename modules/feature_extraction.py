@@ -3,7 +3,7 @@ import string
 from collections import Counter
 
 
-def get_most_common_words(topWordsNumber, tweets):
+def get_most_common_words(top_words_number, tweets, key_list=[]):
     punctuation = list(string.punctuation)
     stop = stopwords.words('english') + punctuation + ['rt', 'via']
 
@@ -16,7 +16,8 @@ def get_most_common_words(topWordsNumber, tweets):
                 word_all.append(word)
         count_all.update(word_all)
 
-    # Print the first 5 most frequent words
-    return count_all.most_common(topWordsNumber)
+    dic = {'most_common': count_all.most_common(top_words_number)}
+    for key in key_list:
+        dic.update({key: count_all[key]})
 
-
+    return dic
