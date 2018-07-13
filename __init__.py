@@ -94,9 +94,24 @@ def sixth_scenario():
     plot_pie_x(data_frame, keys, 'Counts', title='Group Tweets By Product')
 
 
+def seventh_scenario():
+    products = ['ipod', 'ipad', 'iphone', 'mac', 'ios', 'iwatch']
+    for product in set(products):
+        selected_data_frame = data_frame_from_excel.loc[data_frame_from_excel['Tweet'].str.contains(product)]
+        if selected_data_frame.values.size == 0:
+            continue
+        sentiments_value = get_sentiment_percentage_summary(selected_data_frame['Tweet'])
+        keys = list(sentiments_value.keys())
+        values = list(sentiments_value.values())
+        data_frame = pd.DataFrame(
+            {'Sentiment': keys, 'Values': values}, columns=['Sentiment', 'Values'])
+        plot_pie_x(data_frame, keys, 'Values', title='Group Tweets Sentiments For Product %s' % product)
+
+
 first_scenario()
 second_scenario()
 third_scenario()
 fourth_scenario()
 fifth_scenario()
 sixth_scenario()
+seventh_scenario()
